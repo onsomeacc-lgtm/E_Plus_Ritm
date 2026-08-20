@@ -1,15 +1,42 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>E+ Sound Logo</title>
-  <style>
-    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
-    iframe{display:block;width:100%;height:100%;border:0}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Е+ — ЗАДАЁТ РИТМ</title>
+<style>
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+  iframe{display:block;width:100%;height:100%;border:0}
+</style>
 </head>
 <body>
-  <iframe src="eplus_sound_logo_microapp(1)/eplus_sound_logo.html" title="E+ Sound Logo"></iframe>
+<iframe id="logoFrame" src="eplus_sound_logo_microapp(1)/eplus_sound_logo.html" title="E+ Sound Logo"></iframe>
+<script>
+const KEYBOARD_SOUND = "data:audio/wav;base64,UklGRmQeAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YVx1u7...";
+const COFFEE_SOUND = "data:audio/mpeg;base64,";
+const WOW_SOUND = "data:audio/mpeg;base64,";
+const frame = document.getElementById("logoFrame");
+function installRhythm(){
+  const doc=frame.contentDocument;
+  if(!doc)return;
+  const sounds={typewriter:KEYBOARD_SOUND,coin:COFFEE_SOUND,win:WOW_SOUND};
+  if(!doc.getElementById("rhythm-title")){
+    const title=doc.createElement("div");
+    title.id="rhythm-title";
+    title.textContent="ЗАДАЁТ РИТМ";
+    Object.assign(title.style,{position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",zIndex:"100",fontFamily:'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',fontSize:"clamp(18px, 3vw, 32px)",fontWeight:"700",letterSpacing:".08em",color:"#111",whiteSpace:"nowrap",pointerEvents:"none"});
+    doc.body.appendChild(title);
+  }
+  doc.querySelectorAll(".key").forEach(oldKey=>{
+    const key=oldKey.cloneNode(true); oldKey.replaceWith(key);
+    key.addEventListener("pointerdown",event=>{
+      event.preventDefault();
+      const src=sounds[key.dataset.sound]; if(!src)return;
+      const audio=new Audio(src); audio.volume=1; audio.currentTime=0; audio.play().catch(()=>{});
+    });
+  });
+}
+frame.addEventListener("load",installRhythm);
+</script>
 </body>
 </html>
