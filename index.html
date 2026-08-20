@@ -12,27 +12,38 @@
 <body>
 <iframe id="logoFrame" src="eplus_sound_logo_microapp(1)/eplus_sound_logo.html" title="E+ Sound Logo"></iframe>
 <script>
-const KEYBOARD_SOUND = "data:audio/wav;base64,UklGRmQeAABXQVZFZm10IBAAAAABAAEARKwAAESsAAABAAgAZGF0YVx1u7...";
-const COFFEE_SOUND = "data:audio/mpeg;base64,";
-const WOW_SOUND = "data:audio/mpeg;base64,";
-const frame = document.getElementById("logoFrame");
+const sounds={
+  typewriter:"sounds/zvukklaviaturi.mp3",
+  coin:"sounds/prigotovlenie-kofe.mp3",
+  win:"sounds/z_uk-wow.mp3"
+};
+const frame=document.getElementById("logoFrame");
 function installRhythm(){
   const doc=frame.contentDocument;
   if(!doc)return;
-  const sounds={typewriter:KEYBOARD_SOUND,coin:COFFEE_SOUND,win:WOW_SOUND};
   if(!doc.getElementById("rhythm-title")){
     const title=doc.createElement("div");
     title.id="rhythm-title";
     title.textContent="ЗАДАЁТ РИТМ";
-    Object.assign(title.style,{position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",zIndex:"100",fontFamily:'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',fontSize:"clamp(18px, 3vw, 32px)",fontWeight:"700",letterSpacing:".08em",color:"#111",whiteSpace:"nowrap",pointerEvents:"none"});
+    Object.assign(title.style,{
+      position:"fixed",top:"20px",left:"50%",transform:"translateX(-50%)",
+      zIndex:"100",fontFamily:'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
+      fontSize:"clamp(18px,3vw,32px)",fontWeight:"700",letterSpacing:".08em",
+      color:"#111",whiteSpace:"nowrap",pointerEvents:"none"
+    });
     doc.body.appendChild(title);
   }
   doc.querySelectorAll(".key").forEach(oldKey=>{
-    const key=oldKey.cloneNode(true); oldKey.replaceWith(key);
+    const key=oldKey.cloneNode(true);
+    oldKey.replaceWith(key);
     key.addEventListener("pointerdown",event=>{
       event.preventDefault();
-      const src=sounds[key.dataset.sound]; if(!src)return;
-      const audio=new Audio(src); audio.volume=1; audio.currentTime=0; audio.play().catch(()=>{});
+      const src=sounds[key.dataset.sound];
+      if(!src)return;
+      const audio=new Audio(src);
+      audio.volume=1;
+      audio.currentTime=0;
+      audio.play().catch(()=>{});
     });
   });
 }
